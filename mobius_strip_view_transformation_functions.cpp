@@ -16,7 +16,7 @@ float zNear = 0.1f;
 float zFar = 100.0f;
 
 float translateX = 0, translateY = 0, translateZ = -3;
-float rotateX = 0, rotateY = 0, rotateZ = 1;
+float rotateX = 0, rotateY = 0, rotateZ = 0;
 float scaleX = 1, scaleY = 1, scaleZ = 1;
 
 // Initialize GLUT callbacks
@@ -26,6 +26,10 @@ void initGLUTCallbacks() {
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
     glutIdleFunc(display);
+
+    glutMouseFunc((GLUTmousebuttonfun)TwEventMouseButtonGLUT);
+    glutMotionFunc((GLUTmousemotionfun)TwEventMouseMotionGLUT);
+    glutPassiveMotionFunc((GLUTmousemotionfun)TwEventMouseMotionGLUT);
 }
 
 // Initialize AntTweakBar GUI
@@ -92,7 +96,52 @@ void keyboard(unsigned char key, int x, int y) {
 }
 
 // Draw Mobius Strip
-void drawMobiusStrip() {}
+void drawMobiusStrip() {
+    glColor3f(1.0f, 1.0f, 1.0f); // White color
+
+    const int uSteps = 100;  // resolution around loop
+    const int vSteps = 10;   // resolution across width
+    const float uMin = 0.0f;
+    const float uMax = 2.0f * PI;
+    const float vMin = -1.0f;
+    const float vMax = 1.0f;
+
+    // Draw lines along u (around the loop)
+    for (int j = 0; j <= vSteps; j++) {
+        float v = vMin + (vMax - vMin) * j / vSteps;
+
+        glBegin(GL_LINE_STRIP);
+        for (int i = 0; i <= uSteps; i++) {
+            float u = uMin + (uMax - uMin) * i / uSteps;
+
+            float x = cosf(u) * (1 + (v / 2) * cosf(u / 2));
+            float y = sinf(u) * (1 + (v / 2) * cosf(u / 2));
+            float z = (v / 2) * sinf(u / 2);
+
+            glVertex3f(x, y, z);
+        }
+        glEnd();
+    }
+
+    // Draw lines along v (across the width)
+    for (int i = 0; i <= uSteps; i++) {
+        float u = uMin + (uMax - uMin) * i / uSteps;
+
+        glBegin(GL_LINE_STRIP);
+        for (int j = 0; j <= vSteps; j++) {
+            float v = vMin + (vMax - vMin) * j / vSteps;
+
+            float x = cosf(u) * (1 + (v / 2) * cosf(u / 2));
+            float y = sinf(u) * (1 + (v / 2) * cosf(u / 2));
+            float z = (v / 2) * sinf(u / 2);
+
+            glVertex3f(x, y, z);
+        }
+        glEnd();
+    }
+}
+
+
 
 // Matrix utility stubs
 void matrixPerspective(float fovY, float aspect, float zNear, float zFar) {
