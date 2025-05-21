@@ -1,0 +1,34 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "C/C++ - Build OpenGL Mobius Project",
+      "command": "C:\\mingw64\\bin\\g++.exe",
+      "args": [
+        "-g",
+        "${fileDirname}\\main.cpp",
+        "${fileDirname}\\mobius_strip_view_transformation_functions.cpp",
+        "-o",
+        "${fileDirname}\\${fileBasenameNoExtension}.exe",
+        "-I",
+        "C:\\mingw64\\include",
+        "-L",
+        "C:\\mingw64\\lib",
+        "-lAntTweakBar64",
+        "-lfreeglut",
+        "-lopengl32",
+        "-lglu32",
+        "-lwinmm",
+        "-lgdi32"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$gcc"
+      ]
+    }
+  ]
+}
